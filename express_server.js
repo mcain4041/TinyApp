@@ -55,13 +55,19 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls/:shortUrl", (req, res) => {
   let templateVars = {
     shortUrl: req.params.shortUrl,
-    longUrl: urlDatabase[req.params.shortUrl]
+    longUrl: urlDatabase[req.params.shortUrl],
+    urls: urlDatabase
   };
   res.render("urls_show", templateVars);
 });
 
 app.post("/urls/:shortUrl/delete", (req, res) => {
   delete urlDatabase[req.params.shortUrl];
+  res.redirect("/urls");
+});
+
+app.post("/urls/:shortUrl/update", (req, res) => {
+  urlDatabase[req.params.shortUrl] = req.body.longURL;
   res.redirect("/urls");
 });
 

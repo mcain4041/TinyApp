@@ -15,8 +15,10 @@
   <h2></h2>
   <p></p>
   <ul>
-    <li><%=shortURL%> </li>
-    <li><%=href='#'%> </li>
+    <li><%=longUrl %> <a href= "<%=urls[longUrl]%>" > <%= urls[longUrl] %> </a>
+    <form method="POST" action="/urls/<%= shortUrl %>/update"> 
+    <input type="submit" value="update" />
+    <input type="text" name="longURL" value="update" />
   </ul>
 </body>
 
