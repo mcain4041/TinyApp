@@ -24,8 +24,10 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/urls", (req, res) => {
-  console.log(req.body.longURL);
-  res.send("Ok");
+  const i = generateRandomString();
+  urlDatabase[i] = req.body.longURL;
+  console.log(urlDatabase);
+  res.send("OK");
 });
 
 app.get("/", (req, res) => {
