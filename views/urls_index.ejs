@@ -4,17 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-  <title></title>
+  <title>urls_Index</title>
 </head>
 <header>
 <% include partials/_header.ejs %>
 </header>
-<body style="background-color:lightgrey;">
 <body style="font-size:20px; padding:50px;">
   <p></p>
   <ul>
     <% for (var shortUrl in urls) { %>
-    <li><%=shortUrl %> <%= urls[shortUrl] %> </li>
+    <li><%=shortUrl %> <a href="<%= urls[shortUrl] %>" > <%= urls[shortUrl] %> </a>
+    <form method="POST" action="/urls/<%= shortUrl %>/delete">
+    <input type="submit" value="delete" />
+
+    </form>
+    </li>
     <%}%>
   </ul>
   <link href="https://stackpath.bootstrapcdn.com" />

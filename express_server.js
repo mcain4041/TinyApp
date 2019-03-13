@@ -43,21 +43,26 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
-app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL];
-  res.redirect(longURL);
+app.get("/u/:shortUrl", (req, res) => {
+  const longUrl = urlDatabase[req.params.shortUrl];
+  res.redirect(longUrl);
 });
 
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
-app.get("/urls/:shortURL", (req, res) => {
+app.get("/urls/:shortUrl", (req, res) => {
   let templateVars = {
-    shortURL: req.params.shortURL,
-    longURL: urlDatabase[req.params.shortURL]
+    shortUrl: req.params.shortUrl,
+    longUrl: urlDatabase[req.params.shortUrl]
   };
   res.render("urls_show", templateVars);
+});
+
+app.post("/urls/:shortUrl/delete", (req, res) => {
+  delete urlDatabase[req.params.shortUrl];
+  res.redirect("/urls");
 });
 
 app.get("/hello", (req, res) => {
