@@ -5,4 +5,16 @@
 <h1 style="font-size:60px;">Tiny App</h1>
 <h5><p style="color:blue;">Create A New Tiny App</p></h5>
 <body style="background-color:lightgrey;">
+<div><%=username%></div>
+<% if(username){ %>
+    <form action="/logout" method="POST">
+        <input type="submit" value="sign out" />
+    </form>
+ <% } else{ %>  
+    <form action="/login" method="POST">
+        <input type="text" name="username" value="none" />
+        <input type="submit" value="sign in" />
+    </form>
+<% } %>
+
 </header>
