@@ -23,6 +23,19 @@ var urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+const Users = {
+  userRandomID: {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+  user2RandomID: {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  }
+};
+
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -41,11 +54,40 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+app.get("/register", (req, res) => {
+  res.render("urls_register");
+  return;
+});
+
+app.post("/register", (req, res) => {
+  const i = generateRandomString();
+
+  const email = req.body.email;
+  const password = req.body.password;
+  const passwordConfirm = req.body.passwordConfirm;
+  console.log(req.body);
+  if (!email || !password || !passwordConfirm || password !== passwordConfirm) {
+    res.redirect("/register");
+    return;
+  }
+  const newUser = { id: i, email: email, password: password };
+  Users[i] = newUser;
+  res.cookie("user_id", newUser.id);
+  res.redirect("/urls");
+});
+
 app.get("/urls", (req, res) => {
+  // console.log(req.cookies["user_id"]);
+  // console.log(Users);
   let templateVars = {
-    username: req.cookies["username"],
+    user: undefined,
     urls: urlDatabase
   };
+  for (var user in Users) {
+    if (req.cookies["user_id"] == Users[user].id)
+      templateVars.user = Users[user];
+  }
+
   res.render("urls_index", templateVars);
 });
 
@@ -66,7 +108,7 @@ app.get("/urls/:shortUrl", (req, res) => {
     shortUrl: req.params.shortUrl,
     longUrl: urlDatabase[req.params.shortUrl],
     urls: urlDatabase,
-    username: req.cookies["username"]
+    user: Users[req.cookies["user_id"]]
   };
   res.render("urls_show", templateVars);
 });
@@ -82,12 +124,20 @@ app.post("/urls/:shortUrl/update", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  res.cookie("username", req.body.username);
+  for (var user in Users) {
+    console.log(req.body.username);
+    console.log(Users[user].email);
+    if (
+      req.body.username == Users[user].email &&
+      Users[user].password === req.body.password
+    )
+      res.cookie("user_id", Users[user].id);
+  }
   res.redirect("/urls");
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie("username");
+  res.clearCookie("user_id");
   res.redirect("/urls");
 });
 
