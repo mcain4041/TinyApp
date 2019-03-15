@@ -1,22 +1,10 @@
-<!-- views/partials/header.ejs -->
-<!DOCTYPE html>
-<html lang="en">
+
 <header>
 <h1 style="font-size:60px;">Tiny App</h1>
 <h5><p style="color:blue;">Create A New Tiny App</p></h5>
-<body style="background-color:lightgrey;">
-
-<% if(typeof(user) != "undefined"){ %>
+<% if(typeof(user) != "undefined"){ %> 
 <div><%=user.email%></div>
-    <form action="/logout" method="POST">
-        <input type="submit" value="sign out" />
-    </form>
- <% } else{ %>  
-    <form action="/login" method="POST">
-        <input type="text" name="username" value="" placeholder="Email" />
-        <input type="password" name="password" value="" placeholder="Password"/>
-        <input type="submit" value="sign in" />
-    </form>
-<% } %>
+<%}%>
+
 
 </header>

@@ -6,11 +6,8 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <title>urls_Index</title>
 </head>
-<header>
-<% include partials/_header.ejs %>
-
-</header>
 <body style="font-size:20px; padding:50px;">
+<% include partials/_header.ejs %>
   <p></p>
   <ul>
     <% for (var shortUrl in urls) { %>
@@ -19,7 +16,6 @@
     <input type="submit" value="delete" />
     </form>
     <form method="get" action="/urls/<%= shortUrl %>" >  
-    
     <input type="submit" value="Edit" />
     </form>
     </li>
