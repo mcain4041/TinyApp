@@ -12,16 +12,18 @@ function generateRandomString() {
   var possible =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-  for (var i = 0; i < 7; i++)
+  for (var i = 0; i < 7; i++) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
 
   return text;
 }
 
 var urlDatabase = {
-  b2xVn2: "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  b2xVn2: { longURL: "http://www.lighthouselabs.ca", userID: "userRandomID" },
+  lsm5xK: { longURL: "http://www.google.com", userID: "user2RandomID" }
 };
+
 
 const Users = {
   userRandomID: {
@@ -31,15 +33,29 @@ const Users = {
   },
   user2RandomID: {
     id: "user2RandomID",
-    email: "user2@example.com",
-    password: "dishwasher-funk"
+    email: "a@b.c",
+    password: "b"
   }
 };
 
+function retrieveUser(email, password, Users) {
+  for (var user_id in Users) {
+    let userEmail = Users[user_id]["email"]
+    console.log(userEmail)
+    let userPassword = Users[user_id]["password"]
+    console.log(userPassword)
+    if (email === userEmail && password === userPassword) {
+      return Users[user_id];
+
+    }
+  }
+  return false;
+}
+
 function checkEmail(email) {
   for (var user_id in Users) {
-    console.log(Users[user_id].email);
-    console.log(email);
+    // console.log(Users[user_id].email);
+    // console.log(email);
     if (Users[user_id].email === email) {
       return true;
     }
@@ -68,10 +84,10 @@ app.get("/urls.json", (req, res) => {
 
 app.get("/register", (req, res) => {
   res.render("urls_register");
-  return;
 });
 
 app.post("/register", (req, res) => {
+  // console.log(req.body)
   const i = generateRandomString();
 
   const email = req.body.email;
@@ -79,12 +95,10 @@ app.post("/register", (req, res) => {
   const passwordConfirm = req.body.passwordConfirm;
   // console.log(req.body);
   if (checkEmail(email) === true) {
-    return res.status(400).send("You are already a registered user");
-  }
-  if (!email || !password || !passwordConfirm || password !== passwordConfirm) {
-    console.log("bad conditions");
+    res.status(400).send("You are already a registered user");
+  } else if (!email || !password || !passwordConfirm || password !== passwordConfirm) {
+    // console.log("bad conditions");
     res.redirect("/register");
-    return;
   } else {
     const newUser = { id: i, email: email, password: password };
     Users[i] = newUser;
@@ -145,19 +159,30 @@ app.post("/urls/:shortUrl/update", (req, res) => {
   res.redirect("/urls");
 });
 
+// console.log("request body", req.body)
+//     req.body.user_id == Users[user].email &&
+//     Users[user].password === req.body.password
+//   ) {
+
 app.post("/login", (req, res) => {
-  for (var user in Users) {
-    // console.log(req.body.username);
-    // console.log(Users[user].email);
-    if (
-      req.body.user_id == Users[user].email &&
-      Users[user].password === req.body.password
-    ) {
-      res.cookie("user_id", Users[user].id);
-      res.redirect("/urls");
-    }
+
+  const user = retrieveUser(req.body.email, req.body.password, Users);
+  // const userEmail = retrieveUser(req.body.email, req.body.password, Users);
+  // const userPassword = retrieveUser(req.body.password, req.body.email, Users);
+  // const email = req.body.email;
+  // const password = req.body.password;
+  // console.log(userEmail)
+  // console.log(userPassword)
+
+
+
+  if (user) {
+    res.cookie(["user_id"], user.id);
+    res.redirect("/urls");
+  } else {
+    res.status(400)
+      .send("THOU shalt not pass");
   }
-  res.status(400).send("You shall not pass");
 });
 
 app.post("/logout", (req, res) => {
