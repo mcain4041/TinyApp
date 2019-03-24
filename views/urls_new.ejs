@@ -17,14 +17,17 @@
     <h3>Create TinyURL</h3>
       <% if (user_id === undefined) { %>
       <form class="form-inline" action="/login" method="get">
-      <div class="form-group mb-2">  
-    <input type="submit" value="Please Login" />
+        <div class="form-group mb-2">  
+        <input type="submit" value="Please Login" />
+      </form>
       <% } else{ %>    
       <label for="longURL">Enter a URL:</label>
+      <form class="form-inline" action="/urls" method="POST">
         <input class="form-control" type="text" name="longURL" placeholder="http://" style="width: 300px; margin: 1em">
         <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
         <% } %>
       </div>
-    </form>
+    
   </body>
 </html>
